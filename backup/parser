@@ -1,0 +1,176 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package jclas;
+
+import java.io.*;
+import java.util.ArrayList;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+/**
+ *
+ * @author diego
+ */
+public class Parse {
+
+    //InputStreamReader in;
+    InputStream in;
+    int i;
+    public ArrayList<String> lisrArray = new ArrayList<String>();
+    public ArrayList<String> val = new ArrayList<String>();
+
+    public Parse(InputStream in) {
+        this.in = in;
+    }
+
+    Parse(int i) {
+        this.i = i;
+    }
+
+    public ArrayList<String> getVal() throws IOException {
+        parsinger();
+        return val;
+    }
+
+    public ArrayList<String> pxml() throws SAXException, IOException {
+        //get the factory
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        String printl, printt = "haha", printf;
+        try {
+            //Using factory get an instance of document builder
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            //parse using builder to get DOM representation of the XML file
+            Document doc = db.parse(in);
+
+            NodeList nList = doc.getElementsByTagName("link");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+
+
+                Element link = (Element) nList.item(i);
+                printl = link.getAttribute("rdf:resource");
+                lisrArray.add(printl);
+                //System.out.println(i + "_" + print);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return lisrArray;
+    }
+
+    public void parsinger() throws IOException {
+        ArrayList<String> res = new ArrayList();
+        String line = "";
+        InputStreamReader r = new InputStreamReader(in);
+        BufferedReader input = new BufferedReader(r);
+        //
+        while ((line = input.readLine()) != null) {
+            System.out.println(line);
+        }
+//System.
+        try {
+            //BufferedReader input = new BufferedReader(new FileReader("/home/diego/Desktop/xml.xml"));
+
+//            int i = 0;
+//            while ((line = input.readLine()) != null) {   // oso to arxeio den exei keni grammi, diavase ti grammi
+//                i++;
+//                System.out.println("Parse :" + i + "-" + line);
+//                if(line.contains("<Result")){
+//                    res.add(line);
+//                }
+//              
+//                
+//                
+//                System.out.println("i am hereee33333");
+//                //System.out.println("lassssst :" + line);
+//            }
+//            System.out.println("i am hereee4444");
+            while ((line = input.readLine()) != null) {
+                if(line.contains("<Result")) {
+                   break;
+                }
+                if(line.contains("<Result")){
+                    while(!line.contains("</Result>")){
+                        line=input.readLine();
+                        res.add(line);
+                    }
+                   // System.out.println(line);
+                }
+                //System.out.println(line);
+            }
+
+
+//
+//            System.out.println("Parse++++++++ :" + line);
+//            line = input.readLine();   // oso to arxeio den exei keni grammi, diavase ti grammi
+//            System.out.println("Parse :" + line);
+//            if (line.contains("<Result")) {                 //inside the result tag is the info that we need
+//                line = input.readLine();
+//                System.out.println("Parse :" + line);
+//                while (!line.contains("</Result>")) {       // we put the lines in an array list and send them to
+//                    res.add(line);                          // get the tags that we need in shower
+//
+//                    line = input.readLine();
+//                    System.out.println("Parse :" + line);
+//                }
+//                System.out.println("Parse!!!!!!! :" + line);
+//                val.add(valuer(res));
+//                System.out.println("Parse------- :" + line);
+//                res.clear();              // we reinitialize the res arrayList to delete the previous
+//            }                                               // resoults 
+
+
+        } catch (Exception e) {
+            e.getLocalizedMessage();
+            // e.printStackTrace();
+        }
+    }
+
+//    public String valuer(ArrayList<String> res) {
+//        String allDone = "";        //line with the results
+//        String line;                // temp var
+//        String[] info = new String[13];  //temp var
+//        String[] info2 = new String[13]; //
+//        String title, link, format;
+//
+//        boolean flagt = true, flagl = true;
+//
+//        for (int i = 0; i < res.size(); i++) {
+//            line = res.get(i);
+//            // System.out.println("line :"+line);
+//
+//            if (flagl && line.contains("<link")) {
+//                flagl = false;
+//                info = line.split("resource=\"");
+//                info2 = info[1].split("\"/>");
+//                link = info2[0];
+//                allDone = allDone + link + ";";
+//
+//            }
+//
+//            if (flagt && line.contains("<dc:title>")) // an h thesi sti lista exei to element pou theleis
+//            {
+//                flagt = false;
+//                info = line.split("<dc:title>");
+//                info2 = info[1].split("</dc:title>");
+//                title = info2[0];
+//                // System.out.println("title :"+title);
+//                allDone = allDone + title + ";";
+//
+//            }
+////            if (line.contains("<fields:format>")) {
+////                info = line.split("<fields:format>");
+////                info2 = info[1].split("</fields:format>");
+////                format = info2[0];
+////                allDone = allDone + format + "-";
+////            }
+////            if (!flagt && !flagl) { // if we have a title and a link break the loop
+////                break;
+////            }
+//        }
+//        return allDone;
+//    }
+}
